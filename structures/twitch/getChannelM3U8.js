@@ -81,7 +81,7 @@ const getChannelM3U8 = async (opts = {}) => {
     ]
   }
 
-  if (!manifest.playlist) {
+  if (!manifest.playlists) {
     throw new Error('The playlist was not found from API, please check if the user is streaming.')
   }
 

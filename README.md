@@ -315,6 +315,10 @@ getAccessToken({ clientID: 'kimne78kx3ncx6brgo4mv6wki5h1ko', username })
 When you're watch Twitch, if you want to reduce the delay between the streamer, you can enable fast bread mode for fast update of each part of stream output in `ts` file.
 However, these fast bread mode highly depends on your network status and the output video can be corrupted if your network is too weak to handle the multiple stream downloads.
 
+- Getting the hightest quality of the stream M3U8
+
+To get the hightest quality of the stream M3U8, you need to checkout the `chuncked` value in `playlists` object. You may select one of given resolutions by the number of quality string. However, to make the stream clear, just select `chuncked` one.
+
 # License
 
 If you want, please refer this repository in your project :>
