@@ -8,14 +8,10 @@ const getPrivateToken = (opts = {}) => {
     opts.timeout = opts.timeout || 15 * 1000
 
     if (typeof opts.domain !== 'string') {
-      resolve({
-        error: 'The type of `domain` option should be `string`.'
-      })
+      reject(new Error('The type of `domain` option should be `string`.'))
     }
     if (typeof opts.timeout !== 'number') {
-      resolve({
-        error: 'The type of `timeout` option should be `number`.'
-      })
+      reject(new Error('The type of `timeout` option should be `number`.'))
     }
 
     // NOTE: Referer of browser object here to use after the promise.

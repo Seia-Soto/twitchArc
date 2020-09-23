@@ -8,14 +8,10 @@ const getChannelStatus = async (opts = {}) => {
   opts.clientID = opts.clientID || ''
 
   if (typeof opts.username !== 'string' || opts.username.length < 4) {
-    return {
-      error: 'The type of `username` should be string and should be longer than 4 character.'
-    }
+    throw new Error('The type of `username` should be string and should be longer than 4 character.')
   }
   if (typeof opts.clientID !== 'string' || !opts.clientID) {
-    return {
-      error: 'The type of `clientID` should be string and its length should be 1 character at least.'
-    }
+    throw new Error('The type of `clientID` should be string and its length should be 1 character at least.')
   }
 
   log(`getting the status of the '${opts.username}' channel via Twitch GQL api`)

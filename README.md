@@ -49,6 +49,33 @@ There is some rules that I personally keep in mind.
   - Use [debug](https://www.npmjs.com/package/debug) package as logging package. (It isn't native module)
   - Don't use `import` or `require` keyword together and make a collection of `import` or `require` as the type of module(local(`./`) or dependency(or global module)).
 
+## Error handling
+
+The method of error handling has been changed since commit `61ca8a0` and now the library will throw the error instead of giving `error` object and resolving promises.
+You can see the diff between throwing error and giving error object as code with following code snippets:
+
+- Before:
+
+```javascript
+return {
+  error: 'Content of error'
+}
+```
+
+- After:
+
+```javascript
+throw new Error('Content of error')
+```
+
+or
+
+```javascript
+reject(new Error('Content of error'))
+```
+
+In this case, you may handle the error via `try ...catch`.
+
 ## Installation
 
 If you want to start the development of this application, just install dependencies!
@@ -112,7 +139,6 @@ Get the private token(client id) from Twitch web app via playwright(web driver, 
 - returns
   - <Promise: Object>
     - clientID: <String> (optional)
-    - error: <Error> (optional)
 
 ```js
 const {
