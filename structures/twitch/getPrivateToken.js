@@ -16,6 +16,8 @@ const getPrivateToken = (opts = {}) => {
 
     // NOTE: Referer of browser object here to use after the promise.
     let browser
+    // NOTE: To check if resolved two time and prevents random timeout.
+    let isResolved
 
     log('getting latest private token from twitch api')
 
@@ -29,6 +31,10 @@ const getPrivateToken = (opts = {}) => {
       .then(page => {
         // NOTE: Should use timer instead of `load` or `documentloaded` event of `playwright` because Twitch web app is React.JS app.
         const timer = setTimeout(() => {
+          if (isResolved) {
+            return
+          }
+
           log('canceling the web browser because timeout reached')
 
           browser
@@ -41,10 +47,9 @@ const getPrivateToken = (opts = {}) => {
         page
           .on('request', request => {
             // NOTE: `\w{4,25}` is the format of Twitch username.
-            const accessTokenURLPattern = /\/api\/channels\/\w{4,25}\/access_token/i
             const url = request.url()
 
-            if (accessTokenURLPattern.test(url)) {
+            if (url.includes('gql')) {
               const headers = request.headers()
               const headerNames = Object.keys(headers)
 
@@ -57,17 +62,23 @@ const getPrivateToken = (opts = {}) => {
 
                   log('got private token from twitch api request: ' + clientID)
 
+                  isResolved = 1
+
                   clearInterval(timer)
 
-                  browser
+                  page
                     .close()
+                    .then(() => browser.close())
                     .then(() => resolve({ clientID }))
                 }
               }
             }
           })
 
-        page.goto('http://' + opts.domain)
+        page.goto('http://' + opts.domain, {
+          waitUntil: 'domcontentloaded'
+        })
+          .catch(error => log('possible error occured:', error))
       })
   })
 }
